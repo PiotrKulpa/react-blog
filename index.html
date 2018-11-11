@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>Dziala</p>
+    <script>
+
+    //sortowanie postów po kategoriach
+      fetch('http://localhost/wprest/wp/wp-json/wp/v2/posts?per_page=50')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(myJson) {
+        // posortuj dokładnie tylko według kategorii 3
+          console.log(myJson.filter((el) => el.categories.length === 1 && el.categories.includes(3)));
+      });
+
+      // ajax na mediach
+      fetch('http://localhost/wprest/wp/wp-json/wp/v2/media?per_page=50')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(myJson) {
+        //  console.log(myJson);
+          console.log(myJson);
+          let media = myJson.map((el) => el.media_details.sizes ? el.media_details.sizes.medium.source_url : null)
+          console.log(media);
+      });
+    </script>
+  </body>
+</html>
