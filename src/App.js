@@ -8,10 +8,17 @@ class App extends Component {
     posts: []
   }
 
-  loadMore() {
+  loadMoreNum = 10
 
+  loadMore() {
+    //TODO prevent to load more posts than posts from array
+    this.loadMoreNum += 10;
+    this.setState({
+      posts: this.state.defaultPosts.slice(0, this.loadMoreNum)
+    });
+    console.log(this.state.posts);
   }
-  
+
   searchPost(e) {
     //TODO if array state.posts is empty show info
     //TODO add toLowerCase
@@ -48,6 +55,10 @@ class App extends Component {
           posts: this.state.posts.sort((a,b) => (a.title.rendered < b.title.rendered) ? 1 : ((b.title.rendered < a.title.rendered) ? -1 : 0))
         })
         break;
+      default:
+      this.setState({
+        posts: this.state.posts.sort((a,b) => (a.title.rendered > b.title.rendered) ? 1 : ((b.title.rendered > a.title.rendered) ? -1 : 0))
+      })
 
     }
   }
@@ -60,9 +71,9 @@ class App extends Component {
     .then((myJson) => {
       this.setState({
         defaultPosts: myJson,
-        posts: myJson
+        posts: myJson.slice(0, this.loadMoreNum)
       });
-      console.log(this.state.posts);
+
       /** Hide more links from Wordpress*/
       let moreLinks = document.querySelectorAll('.link-more');
       for (let x = 0; x < moreLinks.length; x++) {
@@ -84,16 +95,17 @@ class App extends Component {
         </select>
 
         {!this.state.posts ? <p>Nie ma wpisów</p> : this.state.posts.map((el) =>
-
           <div key={el.id}>
             <h1>{el.title.rendered}</h1>
             <p>{el.date}</p>
             <div dangerouslySetInnerHTML={{__html: el.excerpt.rendered}} />
             <a href="#">More</a>
             <div style={{ display: "none"}} dangerouslySetInnerHTML={{__html: el.content.rendered}} />
-
           </div>
           )}
+
+          <button style={{marginTop: "25px"}} onClick={() => {this.loadMore()}}>Pokaż więcej wpisów</button>
+
 
       </div>
     );
