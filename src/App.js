@@ -4,33 +4,46 @@ import './App.css';
 class App extends Component {
 
   state = {
+    defaultPosts: [],
     posts: []
   }
 
+  loadMore() {
+
+  }
   
+  searchPost(e) {
+    //TODO if array state.posts is empty show info
+    //TODO add toLowerCase
+    if (e.target.value.length > 0) {
+      this.setState({
+        posts: this.state.posts.filter((el) => el.title.rendered.includes(e.target.value))
+      })
+    } else {
+      this.setState({
+        posts: this.state.defaultPosts
+      })
+    }
+  }
 
   sortPosts(e) {
     switch(e.target.value) {
       case 'newest':
-        console.log('przelaczylem na najnowsze');
         this.setState({
           posts: this.state.posts.sort((a,b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0))
         })
         break;
       case 'oldest':
-        console.log('przelaczylem na najstarsze');
         this.setState({
           posts: this.state.posts.sort((a,b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0))
         })
         break;
       case 'asc':
-        console.log('przelaczylem na alfabetycznie ');
         this.setState({
           posts: this.state.posts.sort((a,b) => (a.title.rendered > b.title.rendered) ? 1 : ((b.title.rendered > a.title.rendered) ? -1 : 0))
         })
         break;
       case 'desc':
-        console.log('przelaczylem na alfabetycznie od tyłu');
         this.setState({
           posts: this.state.posts.sort((a,b) => (a.title.rendered < b.title.rendered) ? 1 : ((b.title.rendered < a.title.rendered) ? -1 : 0))
         })
@@ -46,6 +59,7 @@ class App extends Component {
     })
     .then((myJson) => {
       this.setState({
+        defaultPosts: myJson,
         posts: myJson
       });
       console.log(this.state.posts);
@@ -60,7 +74,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        Szukaj: <input />
+        Szukaj: <input onChange={(e) => {this.searchPost(e)}}/>
         Sortuj:
         <select onChange={(e) => {this.sortPosts(e)}}>
           <option value="newest">Najnowsze</option>
