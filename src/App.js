@@ -10,6 +10,12 @@ class App extends Component {
 
   loadMoreNum = 10
 
+  showPost(e) {
+    e.preventDefault();
+    e.target.previousSibling.style.display = 'none';
+    e.target.nextSibling.style.display = 'block';
+  }
+
   loadMore(e) {
     e.preventDefault();
     this.loadMoreNum += 10;
@@ -112,7 +118,7 @@ class App extends Component {
             <h1>{el.title.rendered}</h1>
             <p>{el.date}</p>
             <div dangerouslySetInnerHTML={{__html: el.excerpt.rendered}} />
-            <a href="">More</a>
+            <a href="" onClick={(e) => {this.showPost(e)}}>Pokaż cały wpis</a>
             <div style={{ display: "none"}} dangerouslySetInnerHTML={{__html: el.content.rendered}} />
           </div>
           )}
