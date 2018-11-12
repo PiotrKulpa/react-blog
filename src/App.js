@@ -10,17 +10,20 @@ class App extends Component {
 
   loadMoreNum = 10
 
-  loadMore() {
+  loadMore(e) {
+    e.preventDefault();
     this.loadMoreNum += 10;
     if (this.loadMoreNum <= this.state.defaultPosts.length) {
       this.setState({
         posts: this.state.defaultPosts.slice(0, this.loadMoreNum)
-      });
+      }, this.hideMoreLinks);
     } else {
       this.setState({
         posts: this.state.defaultPosts.slice(0, this.state.defaultPosts.length)
-      });
+      }, this.hideMoreLinks);
     }
+    /** Hide more links from Wordpress*/
+    this.hideMoreLinks();
   }
 
   searchPost(e) {
@@ -69,7 +72,11 @@ class App extends Component {
   }
 
   hideMoreLinks() {
-    
+    /** Hide more links from Wordpress*/
+    let moreLinks = document.querySelectorAll('.link-more');
+    for (let x = 0; x < moreLinks.length; x++) {
+      moreLinks[x].style.display = "none";
+    }
   }
 
   componentDidMount() {
@@ -84,10 +91,7 @@ class App extends Component {
       });
 
       /** Hide more links from Wordpress*/
-      let moreLinks = document.querySelectorAll('.link-more');
-      for (let x = 0; x < moreLinks.length; x++) {
-        moreLinks[x].style.display = "none";
-      }
+      this.hideMoreLinks();
 
     });
   }
@@ -113,7 +117,7 @@ class App extends Component {
           </div>
           )}
 
-          <button style={{marginTop: "25px"}} onClick={() => {this.loadMore()}}>Pokaż więcej wpisów</button>
+          <button style={{marginTop: "25px"}} onClick={(e) => {this.loadMore(e)}}>Pokaż więcej wpisów</button>
 
 
       </div>
