@@ -5,7 +5,8 @@ class App extends Component {
 
   state = {
     defaultPosts: [],
-    posts: []
+    posts: [],
+    msg: ''
   }
 
   loadMoreNum = 10
@@ -32,19 +33,31 @@ class App extends Component {
     this.hideMoreLinks();
   }
 
-  searchPost(e) {
-    //TODO if array state.posts is empty show info - bug?
-    if (e.target.value.length > 0) {
+  alertMessage() {
+    if (this.state.posts.length === 0) {
       this.setState({
-        posts: this.state.defaultPosts.filter((el) => el.title.rendered.toLowerCase().includes(e.target.value.toLowerCase()))
-      });
-      console.log(this.state.posts.length);
-      //this.state.posts.length === 0 ? alert('Nic nie znaleziono') : null;
+        msg: 'Nie ma takich postów'
+      })
     } else {
       this.setState({
-        posts: this.state.defaultPosts
-      });
+        msg: ''
+      })
     }
+
+  }
+
+  searchPost(e) {
+
+      if (e.target.value.length > 0) {
+        this.setState({
+          posts: this.state.defaultPosts.filter((el) => el.title.rendered.toLowerCase().includes(e.target.value.toLowerCase()))
+        }, this.alertMessage);
+      } else {
+        this.setState({
+          posts: this.state.defaultPosts
+        });
+      }
+    
   }
 
   sortPosts(e) {
@@ -112,6 +125,8 @@ class App extends Component {
           <option value="asc">Alfabetycznie rosnąco</option>
           <option value="desc">Alfabetycznie malejąco</option>
         </select>
+
+        <p>{this.state.msg}</p>
 
         {!this.state.posts ? <p>Nie ma wpisów</p> : this.state.posts.map((el) =>
           <div key={el.id}>
