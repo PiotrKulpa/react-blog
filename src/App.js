@@ -11,25 +11,30 @@ class App extends Component {
   loadMoreNum = 10
 
   loadMore() {
-    //TODO prevent to load more posts than posts from array
     this.loadMoreNum += 10;
-    this.setState({
-      posts: this.state.defaultPosts.slice(0, this.loadMoreNum)
-    });
-    console.log(this.state.posts);
+    if (this.loadMoreNum <= this.state.defaultPosts.length) {
+      this.setState({
+        posts: this.state.defaultPosts.slice(0, this.loadMoreNum)
+      });
+    } else {
+      this.setState({
+        posts: this.state.defaultPosts.slice(0, this.state.defaultPosts.length)
+      });
+    }
   }
 
   searchPost(e) {
-    //TODO if array state.posts is empty show info
-    //TODO add toLowerCase
+    //TODO if array state.posts is empty show info - bug?
     if (e.target.value.length > 0) {
       this.setState({
-        posts: this.state.posts.filter((el) => el.title.rendered.includes(e.target.value))
-      })
+        posts: this.state.defaultPosts.filter((el) => el.title.rendered.toLowerCase().includes(e.target.value.toLowerCase()))
+      });
+      console.log(this.state.posts.length);
+      //this.state.posts.length === 0 ? alert('Nic nie znaleziono') : null;
     } else {
       this.setState({
         posts: this.state.defaultPosts
-      })
+      });
     }
   }
 
@@ -61,6 +66,10 @@ class App extends Component {
       })
 
     }
+  }
+
+  hideMoreLinks() {
+    
   }
 
   componentDidMount() {
@@ -99,7 +108,7 @@ class App extends Component {
             <h1>{el.title.rendered}</h1>
             <p>{el.date}</p>
             <div dangerouslySetInnerHTML={{__html: el.excerpt.rendered}} />
-            <a href="#">More</a>
+            <a href="">More</a>
             <div style={{ display: "none"}} dangerouslySetInnerHTML={{__html: el.content.rendered}} />
           </div>
           )}
