@@ -1,22 +1,40 @@
 import React, { Component } from 'react';
 import './App.css';
 
+/**
+ * Class representing a Main component.
+ * @extends React.Component
+ */
 class App extends Component {
 
+  /**
+   * @property {object}  this.state           - The default values for state.
+   * @property {array}   state.defaultPosts   - The array of default posts.
+   * @property {array}   state.posts          - The array of posts for manipulating.
+   */
   state = {
     defaultPosts: [],
     posts: [],
     msg: ''
   }
 
+  /**
+   * Number of showed posts.
+   */
   loadMoreNum = 10
 
+  /**
+   * Show hidden part of post.
+   */
   showPost(e) {
     e.preventDefault();
     e.target.previousSibling.style.display = 'none';
     e.target.nextSibling.style.display = 'block';
   }
 
+  /**
+   * Load more posts. Default is 10.
+   */
   loadMore(e) {
     e.preventDefault();
     this.loadMoreNum += 10;
@@ -33,6 +51,9 @@ class App extends Component {
     this.hideMoreLinks();
   }
 
+  /**
+   * Show message when nothing is found.
+   */
   alertMessage() {
     if (this.state.posts.length === 0) {
       this.setState({
@@ -46,6 +67,9 @@ class App extends Component {
 
   }
 
+  /**
+   * Search post by title.
+   */
   searchPost(e) {
 
       if (e.target.value.length > 0) {
@@ -57,9 +81,12 @@ class App extends Component {
           posts: this.state.defaultPosts
         });
       }
-    
+
   }
 
+  /**
+   * Sort posts.
+   */
   sortPosts(e) {
     switch(e.target.value) {
       case 'newest':
@@ -90,6 +117,9 @@ class App extends Component {
     }
   }
 
+  /**
+   * Hide default more link from Wordpress.
+   */
   hideMoreLinks() {
     /** Hide more links from Wordpress*/
     let moreLinks = document.querySelectorAll('.link-more');
@@ -98,6 +128,9 @@ class App extends Component {
     }
   }
 
+  /**
+   * Fetch data from Wordpress REST API.
+   */
   componentDidMount() {
     fetch('http://localhost/wprest/wp/wp-json/wp/v2/posts?per_page=100')
     .then((response) => {
@@ -114,10 +147,17 @@ class App extends Component {
 
     });
   }
+
+  /**
+   * Render view of this component.
+   */
   render() {
     return (
       <div className="App">
+        {/* Search element*/}
         Szukaj: <input onChange={(e) => {this.searchPost(e)}}/>
+
+      {/* List element */}
         Sortuj:
         <select onChange={(e) => {this.sortPosts(e)}}>
           <option value="newest">Najnowsze</option>
@@ -126,8 +166,10 @@ class App extends Component {
           <option value="desc">Alfabetycznie malejąco</option>
         </select>
 
+        {/* Alert message element */}
         <p>{this.state.msg}</p>
 
+        {/* Render posts */}
         {!this.state.posts ? <p>Nie ma wpisów</p> : this.state.posts.map((el) =>
           <div key={el.id}>
             <h1>{el.title.rendered}</h1>
@@ -138,12 +180,13 @@ class App extends Component {
           </div>
           )}
 
+          {/* Show more posts element */}
           <button style={{marginTop: "25px"}} onClick={(e) => {this.loadMore(e)}}>Pokaż więcej wpisów</button>
-
 
       </div>
     );
   }
 }
 
+/** @module App */
 export default App;
