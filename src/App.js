@@ -122,10 +122,10 @@ class App extends Component {
    */
   hideMoreLinks() {
     /** Hide more links from Wordpress*/
-    let moreLinks = document.querySelectorAll('.link-more');
-    for (let x = 0; x < moreLinks.length; x++) {
-      moreLinks[x].style.display = "none";
-    }
+    //let moreLinks = document.querySelectorAll('.link-more');
+    // for (let x = 0; x < moreLinks.length; x++) {
+    //   moreLinks[x].style.display = "none";
+    // }
   }
 
   /**
@@ -137,6 +137,7 @@ class App extends Component {
       return response.json();
     })
     .then((myJson) => {
+
       this.setState({
         defaultPosts: myJson,
         posts: myJson.slice(0, this.loadMoreNum)
@@ -167,7 +168,7 @@ class App extends Component {
         </select>
 
         {/* Alert message element */}
-        <p>{this.state.msg}</p>
+        <p className="msg">{this.state.msg}</p>
 
         {/* Render posts */}
         {!this.state.posts ? <p>Nie ma wpisów</p> : this.state.posts.map((el) =>
